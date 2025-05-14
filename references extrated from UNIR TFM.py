@@ -68,17 +68,17 @@ def extract_references_from_pdf(pdf_path):
                     filtered_text = filter_head_footer_patterns(page_text, head_footer_patterns)
                     text += filtered_text + "\n"
 
-            ref_positions = [i for i, line in enumerate(text.splitlines()) if "Referencias bibliográficas" in line]
+            ref_positions = [i for i, line in enumerate(text.splitlines()) if "REFERENCIAS" in line]
 
             if not ref_positions:
-                print("No occurrences of 'Referencias bibliográficas' found.")
+                print("No occurrences of 'REFERENCIAS' found.")
                 return
 
             start_line = ref_positions[-1]
             lines = text.splitlines()
 
             for line in lines[start_line:]:
-                if is_page_number(line) or "Referencias bibliográficas" in line:
+                if is_page_number(line) or "REFERENCIAS" in line:
                     continue
 
                 if "Anexo" in line:
@@ -88,7 +88,7 @@ def extract_references_from_pdf(pdf_path):
                     extracted_references.append(line.strip())
 
             if not extracted_references:
-                print("No references found between 'Referencias bibliográficas' and 'Anexo'.")
+                print("No references found between 'REFERENCIAS' and 'Anexo'.")
             else:
                 save_json_file(extracted_references, pdf_path)
 
@@ -101,7 +101,7 @@ def save_json_file(references, input_file_path):
     try:
         input_dir = os.path.dirname(input_file_path)
         input_filename = os.path.splitext(os.path.basename(input_file_path))[0]
-        output_file_path = os.path.join(input_dir, f"{input_filename}_Referencias.json")
+        output_file_path = os.path.join(input_dir, f"{input_filename}_REFERENCIAS.json")
 
         with open(output_file_path, "w", encoding="utf-8") as f:
             json.dump(references, f, ensure_ascii=False, indent=4)
